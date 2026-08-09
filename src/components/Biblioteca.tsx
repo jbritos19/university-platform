@@ -1,6 +1,6 @@
-import { BIBLIOTECA } from "@/data/biblioteca";
+import type { Libro } from "@/data/biblioteca";
 
-export function Biblioteca() {
+export function Biblioteca({ libros }: { libros: Libro[] }) {
   return (
     <section
       className="sec"
@@ -18,7 +18,7 @@ export function Biblioteca() {
         </div>
 
         <div className="bgrid">
-          {BIBLIOTECA.map((b) => (
+          {libros.map((b) => (
             <a
               key={b.titulo}
               className="book rv"

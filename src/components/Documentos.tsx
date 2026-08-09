@@ -1,8 +1,8 @@
 import { BookMarked, Download } from "lucide-react";
-import { DOCUMENTOS } from "@/data/documentos";
+import type { Documento } from "@/data/documentos";
 import { OpenNotas } from "./OpenNotas";
 
-export function Documentos() {
+export function Documentos({ documentos }: { documentos: Documento[] }) {
   return (
     <section className="sec" id="documentos">
       <div className="wrap">
@@ -28,7 +28,7 @@ export function Documentos() {
               </div>
             </div>
             <div className="tramlist">
-              {DOCUMENTOS.map((doc) => (
+              {documentos.map((doc) => (
                 <a
                   key={doc.nombre}
                   className="tramitem"

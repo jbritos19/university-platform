@@ -10,58 +10,71 @@ import {
   ArrowRight,
   Plus,
 } from "lucide-react";
-import { MATERIAS, type Materia } from "@/data/materias";
+import type { Materia } from "@/data/materias";
+import type { MateriaLinks } from "@/lib/content";
 
-type TileDef = {
-  key: keyof Materia["r"];
-  label: string;
-  Icon: typeof FileText;
-};
+type Item = { m: Materia; links: MateriaLinks };
 
-const TILES: TileDef[] = [
+const SINGLES = [
   { key: "programa", label: "Programa", Icon: FileText },
   { key: "resumen", label: "Resumen", Icon: NotebookPen },
   { key: "libro", label: "Libro", Icon: BookOpen },
-  { key: "mas", label: "Más materiales", Icon: FolderOpen },
-];
+] as const;
 
-function ResourceTile({ m, def }: { m: Materia; def: TileDef }) {
-  const raw = m.r[def.key];
-  const ready = def.key === "mas" ? (raw as number) > 0 : Boolean(raw);
-  const state =
-    def.key === "mas"
-      ? ready
-        ? `${raw} archivo${(raw as number) > 1 ? "s" : ""}`
-        : "Sin cargar"
-      : ready
-        ? "Disponible"
-        : "Pendiente";
-  return (
-    <button className={`restile ${ready ? "ready" : "empty"}`} type="button">
+function Tile({
+  label,
+  Icon,
+  ready,
+  href,
+  state,
+}: {
+  label: string;
+  Icon: typeof FileText;
+  ready: boolean;
+  href?: string;
+  state: string;
+}) {
+  const inner = (
+    <>
       <span className="ric">
-        <def.Icon />
+        <Icon />
       </span>
       <span className="rx">
-        <b>{def.label}</b>
+        <b>{label}</b>
         <span className="state">
           <span className="dt" />
           {state}
         </span>
       </span>
       <span className="go">{ready ? <ArrowRight /> : <Plus />}</span>
+    </>
+  );
+  if (ready && href) {
+    return (
+      <a className="restile ready" href={href} target="_blank" rel="noopener noreferrer">
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <button className={`restile ${ready ? "ready" : "empty"}`} type="button">
+      {inner}
     </button>
   );
 }
 
 function MateriaRow({
-  m,
+  item,
+  storeConfigured,
   open,
   onToggle,
 }: {
-  m: Materia;
+  item: Item;
+  storeConfigured: boolean;
   open: boolean;
   onToggle: () => void;
 }) {
+  const { m, links } = item;
   const innerRef = useRef<HTMLDivElement>(null);
   const [h, setH] = useState(0);
 
@@ -72,11 +85,15 @@ function MateriaRow({
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  const masCount = storeConfigured ? links.mas?.length ?? 0 : m.r.mas;
+  const singleReady = (key: "programa" | "resumen" | "libro") =>
+    storeConfigured ? !!links[key] : m.r[key];
+
   const total =
-    (m.r.programa ? 1 : 0) +
-    (m.r.resumen ? 1 : 0) +
-    (m.r.libro ? 1 : 0) +
-    (m.r.mas > 0 ? m.r.mas : 0);
+    (singleReady("programa") ? 1 : 0) +
+    (singleReady("resumen") ? 1 : 0) +
+    (singleReady("libro") ? 1 : 0) +
+    (masCount > 0 ? masCount : 0);
 
   return (
     <div className={`matrow${open ? " open" : ""}`}>
@@ -92,16 +109,39 @@ function MateriaRow({
       </button>
       <div className="matbody" style={{ maxHeight: open ? h : 0 }}>
         <div className="resgrid" ref={innerRef}>
-          {TILES.map((def) => (
-            <ResourceTile key={def.key} m={m} def={def} />
-          ))}
+          {SINGLES.map((s) => {
+            const ready = singleReady(s.key);
+            return (
+              <Tile
+                key={s.key}
+                label={s.label}
+                Icon={s.Icon}
+                ready={ready}
+                href={links[s.key]}
+                state={ready ? "Disponible" : "Pendiente"}
+              />
+            );
+          })}
+          <Tile
+            label="Más materiales"
+            Icon={FolderOpen}
+            ready={masCount > 0}
+            href={links.mas?.[0]?.url}
+            state={masCount > 0 ? `${masCount} archivo${masCount > 1 ? "s" : ""}` : "Sin cargar"}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-export function Materias() {
+export function Materias({
+  items,
+  storeConfigured,
+}: {
+  items: Item[];
+  storeConfigured: boolean;
+}) {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
@@ -117,10 +157,11 @@ export function Materias() {
           </p>
         </div>
         <div className="matlist rv">
-          {MATERIAS.map((m, i) => (
+          {items.map((item, i) => (
             <MateriaRow
-              key={m.n}
-              m={m}
+              key={item.m.n}
+              item={item}
+              storeConfigured={storeConfigured}
               open={openIndex === i}
               onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
             />
