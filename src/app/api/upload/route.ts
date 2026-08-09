@@ -1,39 +1,28 @@
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { isAuthed } from "@/lib/auth";
 
-// Sube archivos directamente a Vercel Blob desde el navegador del delegado.
-// Solo autoriza si hay sesión de admin válida.
+export const runtime = "nodejs";
+
+// Sube el archivo a través del servidor (mismo origen, sin CORS) y lo deja
+// público para que cualquier alumno pueda abrirlo por su link.
+// Límite de la plataforma: ~4.5 MB por archivo.
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
+  if (!(await isAuthed())) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+  const form = await request.formData();
+  const file = form.get("file");
+  if (!(file instanceof File)) {
+    return NextResponse.json({ error: "Falta el archivo" }, { status: 400 });
+  }
   try {
-    const json = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async () => {
-        if (!(await isAuthed())) throw new Error("No autorizado");
-        return {
-          allowedContentTypes: [
-            "application/pdf",
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          ],
-          addRandomSuffix: true,
-          maximumSizeInBytes: 25 * 1024 * 1024, // 25 MB
-        };
-      },
-      onUploadCompleted: async () => {
-        // Podríamos registrar la subida acá si hiciera falta.
-      },
+    const blob = await put(file.name, file, {
+      access: "public",
+      addRandomSuffix: true,
     });
-    return NextResponse.json(json);
+    return NextResponse.json({ url: blob.url });
   } catch (e) {
-    return NextResponse.json(
-      { error: (e as Error).message },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
 }

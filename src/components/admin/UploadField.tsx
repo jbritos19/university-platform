@@ -1,16 +1,24 @@
 "use client";
 
 import { useState, type ChangeEvent } from "react";
-import { upload } from "@vercel/blob/client";
 
 const ACCEPT = ".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx";
+const MAX = 4.4 * 1024 * 1024; // ~4.5 MB (límite de la plataforma)
 
 async function subir(file: File): Promise<string> {
-  const res = await upload(file.name, file, {
-    access: "public",
-    handleUploadUrl: "/api/upload",
-  });
-  return res.url;
+  if (file.size > MAX) {
+    throw new Error(
+      "El archivo supera los ~4,5 MB. Comprimí el PDF o pegá un link (Drive, etc.).",
+    );
+  }
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await fetch("/api/upload", { method: "POST", body: fd });
+  const data = (await res.json()) as { url?: string; error?: string };
+  if (!res.ok || !data.url) {
+    throw new Error(data.error || "No se pudo subir el archivo.");
+  }
+  return data.url;
 }
 
 // Campo de link con botón "Subir": el delegado pega un link o sube un archivo.
