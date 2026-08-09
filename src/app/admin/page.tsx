@@ -5,6 +5,7 @@ import { MATERIAS } from "@/data/materias";
 import { DOCUMENTOS } from "@/data/documentos";
 import { BIBLIOTECA } from "@/data/biblioteca";
 import { saveContentAction, logoutAction } from "./actions";
+import { UploadField, FileUploader } from "@/components/admin/UploadField";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +54,16 @@ export default async function AdminPage({
         <div className="admin-note ok">✓ Cambios guardados y publicados.</div>
       )}
 
+      <div className="admin-card">
+        <h2>Subir un archivo</h2>
+        <p className="hint">
+          Elegí un PDF o imagen de tu compu — se sube y te da un link para pegar
+          en cualquier campo de abajo. (En Programa/Resumen/Libro también tenés
+          el botón “Subir” directo.)
+        </p>
+        <FileUploader />
+      </div>
+
       <form action={saveContentAction}>
         <div className="admin-card">
           <h2>Materias</h2>
@@ -74,16 +85,16 @@ export default async function AdminPage({
                 </div>
                 <div className="admin-row">
                   <div className="admin-field">
-                    <label>Programa (link)</label>
-                    <input name={`prog__${i}`} defaultValue={l.programa ?? ""} placeholder="https://…" />
+                    <label>Programa</label>
+                    <UploadField name={`prog__${i}`} defaultValue={l.programa ?? ""} placeholder="link o subí…" />
                   </div>
                   <div className="admin-field">
-                    <label>Resumen (link)</label>
-                    <input name={`res__${i}`} defaultValue={l.resumen ?? ""} placeholder="https://…" />
+                    <label>Resumen</label>
+                    <UploadField name={`res__${i}`} defaultValue={l.resumen ?? ""} placeholder="link o subí…" />
                   </div>
                   <div className="admin-field">
-                    <label>Libro (link)</label>
-                    <input name={`lib__${i}`} defaultValue={l.libro ?? ""} placeholder="https://…" />
+                    <label>Libro</label>
+                    <UploadField name={`lib__${i}`} defaultValue={l.libro ?? ""} placeholder="link o subí…" />
                   </div>
                 </div>
                 <div className="admin-field">

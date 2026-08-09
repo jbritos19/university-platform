@@ -368,4 +368,12 @@ body.nt-lock{overflow:hidden}
 .admin-note.ok{background:rgba(58,168,118,.12);color:#3aa876;border:1px solid rgba(58,168,118,.28)}
 .admin-note.err{background:rgba(224,73,73,.12);color:#e04949;border:1px solid rgba(224,73,73,.28)}
 .admin-note.warn{background:var(--primary-soft);color:var(--primary-hover);border:1px solid rgba(139,92,246,.28)}
+.upfield{display:flex;gap:8px;align-items:stretch}
+.upfield input{flex:1;min-width:0}
+.upbtn{flex:none;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border-radius:10px;border:1px solid var(--border-2);background:var(--bg-soft);color:var(--ink-2);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit}
+.upbtn:hover{border-color:var(--primary);color:var(--primary-hover)}
+.upbtn.busy{opacity:.6;pointer-events:none}
+.uploader{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.uploader .upbtn{padding:11px 16px}
+.uploader .u-link{flex:1;min-width:200px;font-family:var(--mono);font-size:11.5px;color:var(--primary-hover);word-break:break-all}
 @media(max-width:620px){.admin-row{grid-template-columns:1fr}}
