@@ -101,6 +101,12 @@ export default async function AdminPage({
                   <label>Más materiales (una línea: Etiqueta | link)</label>
                   <textarea name={`mas__${i}`} defaultValue={masText} placeholder="Apunte U3 | https://…" />
                 </div>
+                {m.grabaciones && (
+                  <div className="admin-field">
+                    <label>Grabaciones (link a la carpeta o playlist)</label>
+                    <UploadField name={`grab__${i}`} defaultValue={l.grabaciones ?? ""} placeholder="link de Drive/YouTube o subí…" />
+                  </div>
+                )}
               </div>
             );
           })}

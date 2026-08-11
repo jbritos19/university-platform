@@ -6,6 +6,7 @@ import {
   NotebookPen,
   BookOpen,
   FolderOpen,
+  Video,
   ChevronDown,
   ArrowRight,
   Plus,
@@ -89,11 +90,13 @@ function MateriaRow({
   const singleReady = (key: "programa" | "resumen" | "libro") =>
     storeConfigured ? !!links[key] : m.r[key];
 
+  const grabReady = !!(m.grabaciones && storeConfigured && links.grabaciones);
   const total =
     (singleReady("programa") ? 1 : 0) +
     (singleReady("resumen") ? 1 : 0) +
     (singleReady("libro") ? 1 : 0) +
-    (masCount > 0 ? masCount : 0);
+    (masCount > 0 ? masCount : 0) +
+    (grabReady ? 1 : 0);
 
   return (
     <div className={`matrow${open ? " open" : ""}`}>
@@ -129,6 +132,15 @@ function MateriaRow({
             href={links.mas?.[0]?.url}
             state={masCount > 0 ? `${masCount} archivo${masCount > 1 ? "s" : ""}` : "Sin cargar"}
           />
+          {m.grabaciones && (
+            <Tile
+              label="Grabaciones"
+              Icon={Video}
+              ready={grabReady}
+              href={links.grabaciones}
+              state={grabReady ? "Disponible" : "Pendiente"}
+            />
+          )}
         </div>
       </div>
     </div>

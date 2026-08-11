@@ -46,6 +46,7 @@ export async function saveContentAction(formData: FormData) {
       programa: clean(String(formData.get(`prog__${i}`) ?? "")),
       resumen: clean(String(formData.get(`res__${i}`) ?? "")),
       libro: clean(String(formData.get(`lib__${i}`) ?? "")),
+      grabaciones: clean(String(formData.get(`grab__${i}`) ?? "")),
       mas: lines(formData.get(`mas__${i}`))
         .map((l) => {
           const [label, url] = cols(l);
@@ -54,7 +55,7 @@ export async function saveContentAction(formData: FormData) {
         .filter((x) => x.label && x.url),
     };
     if (!links.mas?.length) delete links.mas;
-    if (links.programa || links.resumen || links.libro || links.mas)
+    if (links.programa || links.resumen || links.libro || links.grabaciones || links.mas)
       materias[m.n] = links;
   });
   content.materias = materias;

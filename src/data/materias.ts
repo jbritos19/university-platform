@@ -10,6 +10,7 @@ export type Materia = {
   p: string; // profesor(es)
   c: string; // color
   r: RecursosEstado;
+  grabaciones?: boolean; // muestra el apartado "Grabaciones" para esta materia
 };
 
 // Estado de recursos por materia. Cambiá false → true (o mas: N) a medida
@@ -20,6 +21,7 @@ export const MATERIAS: Materia[] = [
     p: "Dr. Bonifacio Ríos Ávalos · Dr. Alberto Martínez Simón",
     c: "#c77b18",
     r: { programa: true, resumen: false, libro: true, mas: 0 },
+    grabaciones: true,
   },
   {
     n: "Derecho Administrativo",

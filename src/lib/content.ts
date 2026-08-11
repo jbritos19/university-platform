@@ -8,6 +8,7 @@ export type MateriaLinks = {
   programa?: string;
   resumen?: string;
   libro?: string;
+  grabaciones?: string;
   mas?: { label: string; url: string }[];
 };
 
