@@ -192,6 +192,19 @@ nav.scrolled .navin{background:color-mix(in srgb,var(--bg) 72%,transparent);bord
 .hlegend{display:flex;flex-wrap:wrap;gap:16px;margin-top:26px;font-size:12.5px;color:var(--ink-2)}
 .hlegend span{display:flex;align-items:center;gap:7px}
 .hlegend i{width:9px;height:9px;border-radius:50%}
+/* En pantallas chicas: los días se apilan (scroll vertical, sin scroll lateral) */
+@media(max-width:980px){
+  .weekwrap{overflow-x:visible;margin:0}
+  .week{grid-template-columns:1fr;min-width:0;gap:10px}
+  .hday{padding:15px 17px}
+  .hday-h{font-size:13px;margin-bottom:11px}
+  .hslot{display:flex;align-items:center;gap:12px;padding:13px 15px}
+  .hslot::before{width:5px}
+  .hslot .ht{order:2;margin-left:auto;text-align:right;white-space:nowrap;font-size:12px}
+  .hslot .hs{order:1;margin-top:0;font-size:15px}
+  .hslot.now{flex-wrap:wrap}
+  .hslot.now .live-h{order:3;width:100%;margin-left:0;margin-top:4px}
+}
 
 /* DOCUMENTOS */
 .tramgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
