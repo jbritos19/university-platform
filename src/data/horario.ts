@@ -34,7 +34,7 @@ export const HORARIO: Dia[] = [
     dia: "Jueves",
     hoy: true,
     slots: [
-      { t: "17:50 – 19:50", s: "Derecho Político", c: "#5b6bd6", now: true },
+      { t: "17:50 – 19:50", s: "Derecho Político", c: "#5b6bd6" },
       { t: "20:00 – 22:00", s: "Derecho Administrativo", c: "#8B5CF6" },
     ],
   },
