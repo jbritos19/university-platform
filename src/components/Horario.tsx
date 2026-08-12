@@ -14,8 +14,8 @@ export function Horario() {
           <span className="kicker">Organización</span>
           <h2>Tu semana de clases</h2>
           <p>
-            Turno noche, de lunes a viernes — 17:50 a 22:00. La clase en curso se
-            resalta sola.
+            Turno noche, de lunes a viernes — 17:50 a 22:00. El día de hoy queda
+            resaltado.
           </p>
         </div>
 

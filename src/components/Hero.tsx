@@ -73,7 +73,7 @@ export function Hero() {
       <div className="inner">
         <span className="badge rv">
           <span className="d" />
-          Semestre 2026 · Turno Noche · en curso
+          Sexto Semestre 2026 · Turno Noche · Primera Cátedra
         </span>
         <h1 className="rv">
           <span>Un curso.</span>
