@@ -25,8 +25,19 @@ export function Biblioteca({ libros }: { libros: Libro[] }) {
               href={b.url ?? "#"}
               {...(b.url ? { target: "_blank", rel: "noopener noreferrer" } : {})}
             >
-              <div className="cov" style={{ background: b.grad }}>
-                <span className="t">{b.titulo}</span>
+              <div
+                className="cov"
+                style={
+                  b.portada
+                    ? {
+                        backgroundImage: `url(${b.portada})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }
+                    : { background: b.grad }
+                }
+              >
+                {!b.portada && <span className="t">{b.titulo}</span>}
               </div>
               <h4>{b.materia}</h4>
               <div className="au">{b.autor}</div>

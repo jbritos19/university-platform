@@ -3,8 +3,9 @@ export type Libro = {
   materia: string;
   autor: string;
   estado: string; // "PDF · 12 MB", "Físico", etc.
-  grad: string; // gradiente CSS de la portada
+  grad: string; // gradiente CSS de la portada (fallback si no hay miniatura)
   url?: string;
+  portada?: string; // URL de la imagen de portada (miniatura)
 };
 
 export const BIBLIOTECA: Libro[] = [

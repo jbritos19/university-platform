@@ -67,18 +67,29 @@ export async function saveContentAction(formData: FormData) {
   });
   content.documentos = docs.length ? docs : undefined;
 
-  // Biblioteca ("titulo | materia | autor | estado | url")
-  const libros: Libro[] = lines(formData.get("biblioteca")).map((l) => {
-    const [titulo, materia, autor, estado, url] = cols(l);
-    return {
-      titulo: titulo ?? "",
-      materia: materia ?? "",
-      autor: autor ?? "",
-      estado: estado ?? "PDF",
-      grad: "linear-gradient(150deg,#8B5CF6,#4c2f9e)",
-      url: clean(url),
-    };
-  });
+  // Biblioteca (bloques por libro, hasta 40)
+  const GRADS = [
+    "linear-gradient(150deg,#8B5CF6,#4c2f9e)",
+    "linear-gradient(150deg,#3aa876,#1c5c3e)",
+    "linear-gradient(150deg,#c77b18,#7a4a0d)",
+    "linear-gradient(150deg,#4bb3c9,#245e6b)",
+    "linear-gradient(150deg,#5b6bd6,#2f3a8a)",
+    "linear-gradient(150deg,#d0518f,#7a2b53)",
+  ];
+  const libros: Libro[] = [];
+  for (let i = 0; i < 40; i++) {
+    const titulo = clean(String(formData.get(`lib_tit__${i}`) ?? ""));
+    if (!titulo) continue;
+    libros.push({
+      titulo,
+      materia: String(formData.get(`lib_mat__${i}`) ?? "").trim(),
+      autor: String(formData.get(`lib_aut__${i}`) ?? "").trim(),
+      estado: String(formData.get(`lib_est__${i}`) ?? "").trim() || "PDF",
+      grad: GRADS[libros.length % GRADS.length],
+      url: clean(String(formData.get(`lib_url__${i}`) ?? "")),
+      portada: clean(String(formData.get(`lib_por__${i}`) ?? "")),
+    });
+  }
   content.biblioteca = libros.length ? libros : undefined;
 
   await saveContent(content);
