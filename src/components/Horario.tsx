@@ -28,16 +28,11 @@ export function Horario() {
                   {d.hoy && <span className="badge-h">Hoy</span>}
                 </div>
                 {d.slots.map((s, i) => (
-                  <div
-                    key={i}
-                    className={`hslot${s.now ? " now" : ""}`}
-                    style={cvar(s.c)}
-                  >
+                  <div key={i} className="hslot" style={cvar(s.c)}>
                     <div className="ht">{s.t}</div>
                     <div className="hs">
                       <i />
                       {s.s}
-                      {s.now && <span className="live-h">En curso</span>}
                     </div>
                   </div>
                 ))}
