@@ -19,7 +19,7 @@ function toDecano(): string {
   return `<div class="doc-to">Señor<br>Prof. Dr. Carlos González Morel — Decano<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
 }
 function toDacad(): string {
-  return `<div class="doc-to">Señor<br>Prof. Dr. Carlos María Aquino — Director Académico<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
+  return `<div class="doc-to">Señor<br>Prof. Dr. Ariel Martínez — Director Académico<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
 }
 function firma(v: Valores): string {
   return `<div class="doc-sign"><span class="l">${ph(v.nombre, "NOMBRE Y APELLIDO")}<br>C.I. N.º ${ph(v.ci, "C.I.")}</span></div>`;
@@ -56,7 +56,7 @@ const PLANTILLAS: Record<string, Plantilla> = {
   habilitacion(v) {
     return (
       `<p class="doc-date">${ph(v.fecha, "FECHA")}</p>` +
-      `<div class="doc-to">Señor<br>Prof. Abg. Carlos María Aquino López — Director Académico<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>` +
+      `<div class="doc-to">Señor<br>Prof. Dr. Ariel Martínez — Director Académico<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>` +
       P(`El que suscribe, ${ph(v.nombre, "NOMBRE Y APELLIDO")} con C.I. N.º ${ph(v.ci, "C.I.")}, alumno del ${ph(v.semestre, "SEMESTRE")} semestre, ${ph(v.catedra, "CÁTEDRA")} cátedra del turno ${ph(v.turno, "TURNO")}, de esta prestigiosa casa de estudios, se dirige respetuosamente a Usted y por su digno intermedio a quien corresponda, a fin de exponer y solicitar cuanto sigue:`) +
       P(`QUE, cursando la asignatura ${ph(v.asignatura, "ASIGNATURA")} obtuve ${ph(v.puntaje, "PUNTAJE")} puntos de proceso; abierto el período de recuperación, el Prof. ${ph(v.docente, "DOCENTE")} no se presentó para dicho acto.`) +
       P(`Según el artículo 34 del Reglamento Académico: «Si el docente no asistiera a la clase recuperatoria y a petición por escrito del estudiante, la Dirección Académica lo habilitará con el puntaje mínimo de habilitación, treinta (30) puntos».`) +

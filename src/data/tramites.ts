@@ -44,7 +44,7 @@ function decanoIndic(x?: string): string[] {
 }
 function dacadIndic(x?: string): string[] {
   return (x ? [x] : []).concat([
-    "Dirigido al Director Académico, Prof. Dr. Carlos María Aquino.",
+    "Dirigido al Director Académico, Prof. Dr. Ariel Martínez.",
     "Se envía al correo dacad@der.una.py.",
     "Adjuntá foto de tu cédula de identidad (ambos lados).",
   ]);
