@@ -68,8 +68,8 @@ export function QuickAccess() {
 
         <div className="contact rv">
           <div className="contact-lead">
-            <b>¿Dudas o novedades?</b>
-            Escribinos directo o sumate a los grupos del curso.
+            <b>¿Dudas o consultas?</b>
+            Escribime directo por WhatsApp cuando lo necesites.
           </div>
           <div className="contact-links">
             {CONTACTOS.map((c) => {
