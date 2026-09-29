@@ -16,13 +16,16 @@ function P(html: string): string {
   return `<p class="doc-p">${html}</p>`;
 }
 function toDecano(): string {
-  return `<div class="doc-to">Señor<br>Prof. Dr. Carlos González Morel — Decano<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
+  return `<div class="doc-to">Señor<br>Prof. Dr. Bonifacio Ríos Ávalos — Decano<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
 }
 function toDacad(): string {
   return `<div class="doc-to">Señor<br>Prof. Dr. Ariel Martínez — Director Académico<br>Facultad de Derecho y Ciencias Sociales – Universidad Nacional de Asunción.<br><b>PRESENTE</b></div>`;
 }
 function firma(v: Valores): string {
-  return `<div class="doc-sign"><span class="l">${ph(v.nombre, "NOMBRE Y APELLIDO")}<br>C.I. N.º ${ph(v.ci, "C.I.")}</span></div>`;
+  const img = v.__firma
+    ? `<img class="doc-firma" src="${v.__firma}" alt="Firma" />`
+    : "";
+  return `<div class="doc-sign">${img}<span class="l">${ph(v.nombre, "NOMBRE Y APELLIDO")}<br>C.I. N.º ${ph(v.ci, "C.I.")}</span></div>`;
 }
 
 // Combina los valores por defecto de los campos con lo cargado por el usuario.
@@ -47,7 +50,7 @@ const PLANTILLAS: Record<string, Plantilla> = {
       toDecano() +
       P(`Quien suscribe ${ph(v.nombre, "NOMBRE Y APELLIDO")} con C.I. N.º ${ph(v.ci, "C.I.")}, alumno del ${ph(v.semestre, "SEMESTRE")} semestre, ${ph(v.catedra, "CÁTEDRA")} cátedra del turno ${ph(v.turno, "TURNO")}, se dirige a usted y por su digno intermedio a quien corresponda, con el objeto de exponer y solicitar cuanto sigue:`) +
       P(`Que, conforme al art. 21 del Reglamento Interno, Régimen Académico de la Facultad de Derecho y Ciencias Sociales vigente, se establecen las normativas con referencia a las ausencias de alumnos en días de evaluaciones parciales.`) +
-      P(`Que, por ${ph(v.motivo, "MOTIVO")} me ha sido imposible presentarme ${evento}, a cargo del/la profesor/a ${ph(v.docente, "DOCENTE")}, que se realizó en ${ph(v.fechaAusencia, "FECHA")} del presente año.`) +
+      P(`Que, por ${ph(v.motivo, "MOTIVO")} me ha sido imposible presentarme ${evento}, a cargo del Prof. ${ph(v.docente, "DOCENTE")}, que se realizó en ${ph(v.fechaAusencia, "FECHA")} del presente año.`) +
       P(`<b>POR TANTO, SOLICITO</b> se tenga por justificada mi ausencia a ${dicho}, para tener derecho a rendir/recuperar en la próxima fecha a ser fijada.`) +
       P(`Sin otro particular y esperando una respuesta favorable, aprovecho la ocasión para saludarle muy atentamente.`) +
       firma(v)
@@ -133,5 +136,5 @@ export function buildDoc(t: Tramite, store: Valores): string {
   const inner = fn
     ? fn(v, t)
     : `<p class="doc-empty">Este trámite todavía no tiene su modelo cargado.</p>`;
-  return `<div class="doc">${inner}<div class="doc-foot">Documento generado desde la plataforma del curso · revisá los datos antes de presentarlo.</div></div>`;
+  return `<div class="doc">${inner}</div>`;
 }

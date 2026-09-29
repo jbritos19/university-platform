@@ -13,6 +13,7 @@ import {
 import { TRAMITES, type Tramite, type Campo, type Valores } from "@/data/tramites";
 import { buildDoc, getVals } from "@/lib/doc";
 import { NOTAS_EVENT } from "@/lib/notas";
+import { SignaturePad } from "./SignaturePad";
 
 const CATEGORIAS = ["Todos", "Académico", "Administrativo"] as const;
 
@@ -22,6 +23,7 @@ export function NotasApp() {
   const [cat, setCat] = useState<string>("Todos");
   const [values, setValues] = useState<Record<string, Valores>>({});
   const [modalOpen, setModalOpen] = useState(false);
+  const [adjuntos, setAdjuntos] = useState<Record<string, string[]>>({});
   const printRef = useRef<HTMLDivElement>(null);
 
   const current = currentId ? TRAMITES.find((t) => t.id === currentId) ?? null : null;
@@ -101,9 +103,41 @@ export function NotasApp() {
     }));
   }
 
+  function addAdjuntos(files: FileList | null) {
+    if (!current || !files) return;
+    const id = current.id;
+    Array.from(files).forEach((f) => {
+      if (!f.type.startsWith("image/")) return;
+      const reader = new FileReader();
+      reader.onload = () =>
+        setAdjuntos((prev) => ({
+          ...prev,
+          [id]: [...(prev[id] ?? []), String(reader.result)],
+        }));
+      reader.readAsDataURL(f);
+    });
+  }
+
+  function removeAdjunto(i: number) {
+    if (!current) return;
+    const id = current.id;
+    setAdjuntos((prev) => ({
+      ...prev,
+      [id]: (prev[id] ?? []).filter((_, idx) => idx !== i),
+    }));
+  }
+
+  function docConAdjuntos(): string {
+    if (!current) return "";
+    const imgs = (adjuntos[current.id] ?? [])
+      .map((u) => `<div class="doc-adjunto"><img src="${u}" alt="Adjunto" /></div>`)
+      .join("");
+    return buildDoc(current, values[current.id] ?? {}) + imgs;
+  }
+
   function generarPdf() {
     if (!current || !printRef.current) return;
-    printRef.current.innerHTML = buildDoc(current, values[current.id] ?? {});
+    printRef.current.innerHTML = docConAdjuntos();
     setTimeout(() => window.print(), 60);
   }
 
@@ -228,6 +262,53 @@ export function NotasApp() {
                 )}
               </div>
 
+              {current.campos.length > 0 && (
+                <>
+                  <div className="nt-hr" />
+                  <div className="nt-sec">
+                    <div className="sh">✍️ Tu firma (opcional)</div>
+                    <SignaturePad
+                      value={values[current.id]?.__firma}
+                      onChange={(url) => setField("__firma", url)}
+                    />
+                  </div>
+
+                  <div className="nt-hr" />
+                  <div className="nt-sec">
+                    <div className="sh">📎 Adjuntar documentos (opcional)</div>
+                    <p className="nt-help2">
+                      Sumá una foto de tu cédula (ambos lados), constancia laboral
+                      u otro documento. Se agregan al final del PDF. Solo imágenes.
+                    </p>
+                    <div className="nt-adj-grid">
+                      {(adjuntos[current.id] ?? []).map((u, i) => (
+                        <div className="nt-adj" key={i}>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={u} alt={`Adjunto ${i + 1}`} />
+                          <button
+                            type="button"
+                            onClick={() => removeAdjunto(i)}
+                            aria-label="Quitar adjunto"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                      <label className="nt-adj-add">
+                        ＋ Agregar
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          hidden
+                          onChange={(e) => addAdjuntos(e.target.files)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </>
+              )}
+
               <div className="nt-actions">
                 <button
                   className="btn ghost"
@@ -261,10 +342,7 @@ export function NotasApp() {
           <div
             className="nt-modal-body"
             dangerouslySetInnerHTML={{
-              __html:
-                modalOpen && current
-                  ? buildDoc(current, values[current.id] ?? {})
-                  : "",
+              __html: modalOpen && current ? docConAdjuntos() : "",
             }}
           />
           <div className="nt-modal-act">
