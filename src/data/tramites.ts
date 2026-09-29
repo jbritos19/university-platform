@@ -37,7 +37,7 @@ export type Tramite = {
 // Indicaciones según destinatario (tomadas del documento oficial).
 function decanoIndic(x?: string): string[] {
   return (x ? [x] : []).concat([
-    "Dirigido al Decano, Prof. Dr. Carlos González Morel.",
+    "Dirigido al Decano, Prof. Dr. Bonifacio Ríos Ávalos.",
     "Se presenta por Mesa de Entrada (en físico) o al correo mesadeentrada@der.una.py.",
     "Adjuntá foto de tu cédula de identidad (ambos lados).",
   ]);
